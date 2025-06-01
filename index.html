@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Momsuträknare</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0 auto;
+        width: 240px;
+      }
+      legend {
+        display: block;
+        margin-bottom: 10px;
+      }
+      legend > div {
+        display: inline-block;
+        width: 100px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      input {
+        width: 100px;
+        padding: 5px;
+        margin-left: 10px;
+        text-align: right;
+      }
+      input:focus {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <legend><div>Brutto</div>
+        <input id="brutto" type="number" placeholder="125">
+      </legend>
+      <legend><div>Netto</div>
+        <input id="netto" type="number" placeholder="100">
+      </legend>
+      <legend><div>Moms</div>
+        <input id="moms" type="number" placeholder="25">
+      </legend>
+    </form>
+
+    <script>
+      const momsSats = 1.25;
+      const brutto = document.getElementById("brutto"); 
+      const netto = document.getElementById("netto");
+      const moms = document.getElementById("moms");
+      [ brutto, netto, moms].forEach((input) => {
+        input.addEventListener("input", () => {
+          const b = parseFloat(brutto.value) || 0;
+          const n = parseFloat(netto.value) || 0;
+          const m = parseFloat(moms.value) || 0;
+          if (input === brutto) {
+            netto.value = (b / momsSats).toFixed(2);
+            moms.value = Math.abs(b - netto.value).toFixed(2);
+          } else if (input === netto) {
+            brutto.value = (n * momsSats).toFixed(2);
+            moms.value = (brutto.value - n).toFixed(2);
+          } else if (input === moms) {
+            brutto.value = (m / (1 - (1 / momsSats))).toFixed(2);
+            netto.value = (brutto.value - m).toFixed(2);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
